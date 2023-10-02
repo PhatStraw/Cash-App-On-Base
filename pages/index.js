@@ -20,7 +20,7 @@ export default function Home() {
   const [withdrawl, setWithdrawl] = useState()
   const [balance, setBalance] = useState()
   const [network, setNetwork] = useState()
-
+  const liveNetwork = process.env.NETWORK_ID || 84531
   //Connect Wallet
   useEffect(() => {
     const connectWallet = async () => {
@@ -41,7 +41,8 @@ export default function Home() {
           // what MetaMask injects as window.ethereum into each page
           const pro = new ethers.providers.Web3Provider(window.ethereum)
           setProvider(pro)
-
+          const { chainId } = await pro.getNetwork()
+          setNetwork(chainId)
           // MetaMask requires requesting permission to connect users accounts
           await pro.send("eth_requestAccounts", []);
 
@@ -54,7 +55,7 @@ export default function Home() {
           // The Contract object
           const CashAppContract = new ethers.Contract(abi.address, abi.abi, pro)
           setContract(CashAppContract)
-
+          console.log
           //Last Message Sent
           const messy = await CashAppContract.messages("0")
           setMessages((prevMessages) => [...prevMessages, { content: messy[0], sender: messy[1], receiver: messy[2] }])
@@ -102,9 +103,9 @@ export default function Home() {
   useEffect(() => {
     const externalProvider = window.ethereum; // Your existing Web3-compatible provider
     const provider = new ethers.providers.Web3Provider(externalProvider);
-  
+
     provider.on("network", (newNetwork, oldNetwork) => {
-      if(!oldNetwork && newNetwork.chainId !== 84531){
+      if (!oldNetwork && newNetwork.chainId !== 84531) {
         alert("APP WILL NOT WORK: Change Your Network TO Base GOERLI")
       }
       if (oldNetwork) {
@@ -112,9 +113,9 @@ export default function Home() {
         window.location.reload();
       }
     });
-  
+
     // Your existing code...
-  
+
     // Clean up the event listener when the component unmounts
     return () => {
       provider.off("network");
@@ -155,7 +156,8 @@ export default function Home() {
   }
 
   const onWithdrawl = async () => {
-    if (withdrawl) {
+// try{    
+  if (withdrawl) {
       const CashAppWithSigner = await contract.connect(signer);
       const tx = await CashAppWithSigner.withdrawl(withdrawl);
       setLoading(true)
@@ -163,19 +165,24 @@ export default function Home() {
       console.log(wait)
       setLoading(false)
     }
+//   }catch(err){
+// console.log("here",err)
+//     }
   }
 
   return (
     <div className='pt-10'>
-      <div className='flex flex-col items-center justify-center'>
-        <Image key="logo" alt="Pic of logo" src={logo} />
-        <div>
-          {cashTag ? `Cash Tag: ${cashTag}` : "No CashTag Found For This Wallet"}
+      {network === liveNetwork ?
+      <div>
+        <div className='flex flex-col items-center justify-center'>
+          <Image key="logo" alt="Pic of logo" src={logo} />
+          <div>
+            {cashTag ? `Cash Tag: ${cashTag}` : "No CashTag Found For This Wallet"}
+          </div>
+          <div>
+            {balance ? `Balance: ${balance}E` : "No Balance Found For This Wallet"}
+          </div>
         </div>
-        <div>
-          {balance ? `Balance: ${balance}E` : "No Balance Found For This Wallet"}
-        </div>
-      </div>
       {!loading ?
         <div className='grid sm:grid-cols-1 md:grid-cols-2 justify-items-center w-full md:px-[10rem]'>
           <Action>
@@ -209,22 +216,27 @@ export default function Home() {
           </Action>
           <Action>
             <h3 className='text-3xl align-center'>Withdrawl</h3>
-            <input placeholder='Withdrawl From A CashTag You Own' onChange={e => setWithdrawl(e.target.value)} />
+            <input placeholder='Withdrawl From A CashTag You Own'
+              className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              onChange={e => setWithdrawl(e.target.value)} />
             <button onClick={onWithdrawl} className='bg-black text-white p-4 mt-2' >Click2Withdrawl</button>
           </Action>
           <Action>
             <h3 className='text-3xl align-center'>Messages</h3>
-            <div className='w-full grid md:grid-cols-2'>
+            <div className='w-full flex flex-wrap    '>
               {messages?.map((i) => (
-                <div key={i.sender} className='flex w-1/2 border flex-col'>
-                  <div>Sender:{i.sender}</div>
-                  <div>Reciever:{i.receiver}</div>
-                  <div>Message:{i.content}</div>
+                <div key={i.sender} className='flex w-1/2 border flex-col items-center'>
+                  <h3 className='border-b border-b-black'>MESSAGE</h3>
+                  <div>Sender:&nbsp;{i.sender}</div>
+                  <div>Reciever:&nbsp;{i.receiver}</div>
+                  <div>Message:&nbsp;{i.content}</div>
                 </div>
               ))}
             </div>
           </Action>
         </div> : <div className='text-center flex justify-center items-center'>transactions processing...</div>}
+      </div>
+      : <div className='text-center flex justify-center items-center'>connect to Base GOERLI to Continue</div>}
     </div>
   )
 }
