@@ -136,7 +136,7 @@ export default function Home() {
   return (
     <div className='pt-10'>
       <div className='flex flex-col items-center justify-center'>
-        <Image src={logo} />
+        <Image key="logo" src={logo} />
         <div>
           {cashTag ? `Cash Tag: ${cashTag}` : "No CashTag Found For This Wallet"}
         </div>
