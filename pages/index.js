@@ -173,7 +173,7 @@ export default function Home() {
             <h3 className='text-3xl align-center'>Messages</h3>
             <div className='w-full grid md:grid-cols-2'>
               {messages?.map((i) => (
-                <div className='flex w-1/2 border flex-col'>
+                <div key={i.sender} className='flex w-1/2 border flex-col'>
                   <div>Sender:{i.sender}</div>
                   <div>Reciever:{i.receiver}</div>
                   <div>Message:{i.content}</div>
