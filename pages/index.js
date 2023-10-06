@@ -114,8 +114,6 @@ export default function Home() {
       }
     });
 
-    // Your existing code...
-
     // Clean up the event listener when the component unmounts
     return () => {
       provider.off("network");
@@ -162,12 +160,8 @@ export default function Home() {
       const tx = await CashAppWithSigner.withdrawl(withdrawl);
       setLoading(true)
       const wait = await tx.wait()
-      console.log(wait)
       setLoading(false)
     }
-//   }catch(err){
-// console.log("here",err)
-//     }
   }
 
   return (
