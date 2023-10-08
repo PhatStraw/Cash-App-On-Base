@@ -154,8 +154,8 @@ export default function Home() {
   }
 
   const onWithdrawl = async () => {
-// try{    
-  if (withdrawl) {
+    // try{    
+    if (withdrawl) {
       const CashAppWithSigner = await contract.connect(signer);
       const tx = await CashAppWithSigner.withdrawl(withdrawl);
       setLoading(true)
@@ -165,72 +165,84 @@ export default function Home() {
   }
 
   return (
-    <div className='pt-10'>
+    <div className="min-h-screen bg-gray-100 p-6">
+      <Head>
+        <title>Decentralized Cash App</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet" />
+      </Head>
       {network === liveNetwork ?
-      <div>
-        <div className='flex flex-col items-center justify-center'>
-          <Image key="logo" alt="Pic of logo" src={logo} />
-          <div>
-            {cashTag ? `Cash Tag: ${cashTag}` : "No CashTag Found For This Wallet"}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <Image key="logo" alt="Pic of logo" src={logo} className="mx-auto h-12 w-auto" />
+            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+              {cashTag ? `Cash Tag: ${cashTag}` : "No CashTag Found For This Wallet"}
+            </h2>
+            <p className="mt-2 text-sm text-gray-600">
+              {balance ? `Balance: ${balance}E` : "No Balance Found For This Wallet"}
+            </p>
           </div>
-          <div>
-            {balance ? `Balance: ${balance}E` : "No Balance Found For This Wallet"}
+          <div className="mt-8">
+            {!loading ?
+              <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                <Action className="bg-white p-6 rounded-lg shadow-lg transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+                  <h3 className='text-xl font-bold text-center mb-4'>Register</h3>
+                  <input
+                    type="text"
+                    name="register"
+                    id="register"
+                    className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="Register a CashTag"
+                    onChange={e => setRegister(e.target.value)}
+                  />
+                  <button onClick={onRegister} className='w-full bg-indigo-600 text-white p-3 rounded hover:bg-indigo-700 transition duration-300'>Register</button>
+                </Action>
+                <Action className="bg-white p-6 rounded-lg shadow-lg transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+                  <h3 className='text-xl font-bold text-center mb-4'>Pay</h3>
+                  <input placeholder='To'
+                    className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onChange={e => setTo(e.target.value)} />
+                  <input placeholder='From'
+                    className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onChange={e => setFrom(e.target.value)} />
+                  <input placeholder='Message'
+                    className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onChange={e => setMessage(e.target.value)} />
+                  <input placeholder='Amount'
+                    className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onChange={e => setAmount(e.target.value)} />
+                  <button onClick={onPay} className='bg-black text-white p-4 mt-2' >Click2Pay</button>
+                </Action>
+                <Action className="bg-white p-6 rounded-lg shadow-lg transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+                  <h3 className='text-xl font-bold text-center mb-4'>Withdrawl</h3>
+                  <input placeholder='Withdrawl From A CashTag You Own'
+                    className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onChange={e => setWithdrawl(e.target.value)} />
+                  <button onClick={onWithdrawl} className='bg-black text-white p-4 mt-2' >Click2Withdrawl</button>
+                </Action>
+                <Action className="bg-white p-6 rounded-lg shadow-lg">
+                  <h3 className='text-xl font-bold text-center mb-4'>Messages</h3>
+                  <div className='w-full flex flex-wrap'>
+                    {messages?.map((i, index) => (
+                      <div key={index} className='overflow-auto flex w-full border flex-col items-center p-4 mb-4 bg-gray-50 rounded-lg shadow '>
+                        <h3 className='border-b border-b-gray-200 w-full pb-2 mb-2 text-center font-semibold'>MESSAGE</h3>
+                        <div>Sender:&nbsp;{i.sender}</div>
+                        <div>Reciever:&nbsp;{i.receiver}</div>
+                        <div>Message:&nbsp;{i.content}</div>
+                      </div>
+                    ))}
+                  </div>
+                </Action>
+              </div>
+              : <div className='flex justify-center items-center h-60'><div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div></div>}
           </div>
         </div>
-      {!loading ?
-        <div className='grid sm:grid-cols-1 md:grid-cols-2 justify-items-center w-full md:px-[10rem]'>
-          <Action>
-            <h3 className='text-3xl align-center'>Register</h3>
-            <input
-              type="text"
-              name="register"
-              id="register"
-              className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              placeholder="Register a CashTag"
-              onChange={e => setRegister(e.target.value)}
-            />
-            <button onClick={onRegister} className='bg-black text-white p-4 mt-2' >Click2Register</button>
-          </Action>
-          <Action>
-            <h3 className='text-3xl align-center'>Pay</h3>
-
-            <input placeholder='To'
-              className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={e => setTo(e.target.value)} />
-            <input placeholder='From'
-              className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={e => setFrom(e.target.value)} />
-            <input placeholder='Message'
-              className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={e => setMessage(e.target.value)} />
-            <input placeholder='Amount'
-              className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={e => setAmount(e.target.value)} />
-            <button onClick={onPay} className='bg-black text-white p-4 mt-2' >Click2Pay</button>
-          </Action>
-          <Action>
-            <h3 className='text-3xl align-center'>Withdrawl</h3>
-            <input placeholder='Withdrawl From A CashTag You Own'
-              className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={e => setWithdrawl(e.target.value)} />
-            <button onClick={onWithdrawl} className='bg-black text-white p-4 mt-2' >Click2Withdrawl</button>
-          </Action>
-          <Action>
-            <h3 className='text-3xl align-center'>Messages</h3>
-            <div className='w-full flex flex-wrap    '>
-              {messages?.map((i) => (
-                <div key={i.sender} className='flex w-1/2 border flex-col items-center'>
-                  <h3 className='border-b border-b-black'>MESSAGE</h3>
-                  <div>Sender:&nbsp;{i.sender}</div>
-                  <div>Reciever:&nbsp;{i.receiver}</div>
-                  <div>Message:&nbsp;{i.content}</div>
-                </div>
-              ))}
-            </div>
-          </Action>
-        </div> : <div className='text-center flex justify-center items-center'>transactions processing...</div>}
-      </div>
-      : <div className='text-center flex justify-center items-center'>connect to Base GOERLI to Continue</div>}
+        : <div className='flex justify-center items-center h-screen'>
+          <div className="text-center">
+            <p className='text-xl font-bold'>Connect to Base GOERLI to Continue</p>
+          </div>
+        </div>
+      }
     </div>
   )
+
 }
