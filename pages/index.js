@@ -57,18 +57,57 @@ export default function Home() {
   const [contract, setContract] = useState(null);
   const [register, setRegister] = useState();
   const [loading, setLoading] = useState(false);
-  const [cashTag, setCashTag] = useState();
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState();
   const [to, setTo] = useState();
   const [from, setFrom] = useState();
   const [amount, setAmount] = useState();
   const [withdrawl, setWithdrawl] = useState();
-  const [balance, setBalance] = useState();
   const [network, setNetwork] = useState();
   const [accountInfo, setAccountInfo] = useState(null);
   const liveNetwork = process.env.NETWORK_ID || 84531;
 
+  //   //Track MessageSent Events
+  useEffect(() => {
+    const trythis = async () => {
+      if (contract) {
+        contract.on("MessageSent", (content, sender, receiver) => {
+          console.log(`${sender} sent ${content} to ${receiver}`);
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            { content, sender, receiver },
+          ]);
+        });
+      }
+    };
+    trythis();
+    return () => {
+      if (contract) {
+        contract.removeAllListeners();
+      }
+    };
+  }, [contract]);
+
+  //   //Track network changes
+  useEffect(() => {
+    const externalProvider = window.ethereum; // Your existing Web3-compatible provider
+    const provider = new ethers.providers.Web3Provider(externalProvider);
+
+    provider.on("network", (newNetwork, oldNetwork) => {
+      if (!oldNetwork && newNetwork.chainId !== 84531) {
+        alert("APP WILL NOT WORK: Change Your Network TO Base GOERLI");
+      }
+      if (oldNetwork) {
+        // Network has changed, refresh the page to reset UI components
+        window.location.reload();
+      }
+    });
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      provider.off("network");
+    };
+  }, []);
 
   const connectWallet = async () => {
     setLoading(true);
@@ -131,55 +170,8 @@ export default function Home() {
         alert(error);
       }
       setLoading(false);
-      // Clean up the event listener when the component unmounts
-      // return () => {
-      //   provider.off("network");
-      // };
     }
   };
-
-
-  //   //Track MessageSent Events
-  useEffect(() => {
-    const trythis = async () => {
-      if (contract) {
-        contract.on("MessageSent", (content, sender, receiver) => {
-          console.log(`${sender} sent ${content} to ${receiver}`);
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            { content, sender, receiver },
-          ]);
-        });
-      }
-    };
-    trythis();
-    return () => {
-      if (contract) {
-        contract.removeAllListeners();
-      }
-    };
-  }, [contract]);
-
-  //   //Track network changes
-  useEffect(() => {
-    const externalProvider = window.ethereum; // Your existing Web3-compatible provider
-    const provider = new ethers.providers.Web3Provider(externalProvider);
-
-    provider.on("network", (newNetwork, oldNetwork) => {
-      if (!oldNetwork && newNetwork.chainId !== 84531) {
-        alert("APP WILL NOT WORK: Change Your Network TO Base GOERLI");
-      }
-      if (oldNetwork) {
-        // Network has changed, refresh the page to reset UI components
-        window.location.reload();
-      }
-    });
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      provider.off("network");
-    };
-  }, []);
 
   const onRegister = async () => {
     if (register) {
