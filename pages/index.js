@@ -20,7 +20,7 @@ const TabbedActions = ({ tabs, activeTab }) => {
       {tabs.map((tab) => (
         <Action
           key={tab.name}
-          className={`mt-2 bg-white p-6 rounded-lg shadow-lg transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110 min-h-[50vh] ${
+          className={`mt-2 bg-white p-6 rounded-lg shadow-lg min-h-[50vh] ${
             activeTab === tab.name ? "block" : "hidden"
           }`}
         >
@@ -270,7 +270,7 @@ export default function Home() {
       name: Tabs.ACCOUNT,
       component: (
         <div className="text-center ">
-          <h1 className="pt-3 text-4xl font-bold text-indigo-600">Account</h1>
+          <h1 className="pt-3 text-4xl font-bold text-indigo-600 text-center pb-4">Account</h1>
           {accountInfo && (
             <>
               <h2 className="pt-6 text-3xl text-gray-900">
@@ -292,7 +292,7 @@ export default function Home() {
       name: Tabs.REGISTER,
       component: (
         <>
-          <h3 className="text-xl font-bold text-center mb-4">Register</h3>
+          <h1 className="pt-3 text-4xl font-bold text-indigo-600 text-center pb-4">Register</h1>
           <input
             type="text"
             name="register"
@@ -314,25 +314,25 @@ export default function Home() {
       name: Tabs.PAY,
       component: (
         <>
-          <h3 className="text-xl font-bold text-center mb-4">Pay</h3>
+          <h1 className="pt-3 text-4xl font-bold text-indigo-600 text-center pb-4">Pay</h1>
           <input
             placeholder="To"
-            className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             onChange={(e) => setTo(e.target.value)}
           />
           <input
             placeholder="From"
-            className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             onChange={(e) => setFrom(e.target.value)}
           />
           <input
             placeholder="Message"
-            className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             onChange={(e) => setMessage(e.target.value)}
           />
           <input
             placeholder="Amount"
-            className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             onChange={(e) => setAmount(e.target.value)}
           />
           <button
@@ -348,11 +348,11 @@ export default function Home() {
       name: Tabs.WITHDRAWL,
       component: (
         <>
-          <h3 className="text-xl font-bold text-center mb-4">Withdrawl</h3>
+          <h1 className="pt-3 text-4xl font-bold text-indigo-600 text-center pb-4">Withdrawl</h1>
 
           <input
             placeholder="Withdrawl From A CashTag You Own"
-            className="block w-full rounded-md border-0 py-1.5 pl-2 m-1  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             onChange={(e) => setWithdrawl(e.target.value)}
           />
           <button
@@ -368,7 +368,7 @@ export default function Home() {
       name: Tabs.MESSAGES,
       component: (
         <>
-          <h3 className="text-xl font-bold text-center mb-4">Messages</h3>
+          <h1 className="pt-3 text-4xl font-bold text-indigo-600 text-center pb-4">Messages</h1>
           <div className="w-full flex flex-wrap">
             {messages?.map((i, index) => (
               <div
@@ -376,7 +376,7 @@ export default function Home() {
                 className="overflow-auto flex w-full border flex-col items-center p-4 mb-4 bg-gray-50 rounded-lg shadow "
               >
                 <h3 className="border-b border-b-gray-200 w-full pb-2 mb-2 text-center font-semibold">
-                  MESSAGE
+                  Message #{index + 1}
                 </h3>
                 <div>Sender:&nbsp;{i.sender}</div>
                 <div>Reciever:&nbsp;{i.receiver}</div>
@@ -613,7 +613,7 @@ export default function Home() {
 //             {!loading ?
 //               <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 //                 <Action className="bg-white p-6 rounded-lg shadow-lg transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-//                   <h3 className='text-xl font-bold text-center mb-4'>Register</h3>
+//                   <h3 className='text-xl font-bold text-center mb-4'>Register</h1>
 //                   <input
 //                     type="text"
 //                     name="register"
@@ -625,34 +625,34 @@ export default function Home() {
 //                   <button onClick={onRegister} className='w-full bg-indigo-600 text-white p-3 rounded hover:bg-indigo-700 transition duration-300'>Register</button>
 //                 </Action>
 //                 <Action className="bg-white p-6 rounded-lg shadow-lg transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-//                   <h3 className='text-xl font-bold text-center mb-4'>Pay</h3>
+//                   <h3 className='text-xl font-bold text-center mb-4'>Pay</h1>
 //                   <input placeholder='To'
-//                     className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+//                     className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 //                     onChange={e => setTo(e.target.value)} />
 //                   <input placeholder='From'
-//                     className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+//                     className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 //                     onChange={e => setFrom(e.target.value)} />
 //                   <input placeholder='Message'
-//                     className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+//                     className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 //                     onChange={e => setMessage(e.target.value)} />
 //                   <input placeholder='Amount'
-//                     className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+//                     className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 //                     onChange={e => setAmount(e.target.value)} />
 //                   <button onClick={onPay} className='bg-black text-white p-4 mt-2' >Click2Pay</button>
 //                 </Action>
 //                 <Action className="bg-white p-6 rounded-lg shadow-lg transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-//                   <h3 className='text-xl font-bold text-center mb-4'>Withdrawl</h3>
+//                   <h3 className='text-xl font-bold text-center mb-4'>Withdrawl</h1>
 //                   <input placeholder='Withdrawl From A CashTag You Own'
-//                     className="block w-full rounded-md border-0 py-1.5 pl-7 m-1 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+//                     className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 //                     onChange={e => setWithdrawl(e.target.value)} />
 //                   <button onClick={onWithdrawl} className='bg-black text-white p-4 mt-2' >Click2Withdrawl</button>
 //                 </Action>
 //                 <Action className="bg-white p-6 rounded-lg shadow-lg">
-//                   <h3 className='text-xl font-bold text-center mb-4'>Messages</h3>
+//                   <h3 className='text-xl font-bold text-center mb-4'>Messages</h1>
 //                   <div className='w-full flex flex-wrap'>
 //                     {messages?.map((i, index) => (
 //                       <div key={index} className='overflow-auto flex w-full border flex-col items-center p-4 mb-4 bg-gray-50 rounded-lg shadow '>
-//                         <h3 className='border-b border-b-gray-200 w-full pb-2 mb-2 text-center font-semibold'>MESSAGE</h3>
+//                         <h3 className='border-b border-b-gray-200 w-full pb-2 mb-2 text-center font-semibold'>MESSAGE</h1>
 //                         <div>Sender:&nbsp;{i.sender}</div>
 //                         <div>Reciever:&nbsp;{i.receiver}</div>
 //                         <div>Message:&nbsp;{i.content}</div>
