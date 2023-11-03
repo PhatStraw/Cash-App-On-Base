@@ -4,6 +4,7 @@ import { BigNumber, ethers } from "ethers";
 import abi from "../abi.json";
 import Action from "components/components/action";
 import PacmanLoader from "react-spinners/PacmanLoader";
+
 const Tabs = {
   REGISTER: "register",
   PAY: "pay",
@@ -12,19 +13,13 @@ const Tabs = {
   ACCOUNT: "account",
 };
 
-const override = {
-  display: "block",
-  margin: "0 auto",
-  borderColor: "red",
-};
-
 const TabbedActions = ({ tabs, activeTab }) => {
   return (
-    <div className="min-h-[50vh]">
+    <div className="mt-4 md:mt-6">
       {tabs.map((tab) => (
         <Action
           key={tab.name}
-          className={`mt-2 bg-white p-6 rounded-lg shadow-lg min-h-[50vh] ${
+          className={`mt-2 bg-white min-h-[80vh] p-6 rounded-lg shadow-lg ${
             activeTab === tab.name ? "block" : "hidden"
           }`}
         >
@@ -267,14 +262,16 @@ export default function Home() {
           </h1>
           {accountInfo && (
             <>
-              <h2 className="pt-6 text-3xl text-gray-900">
-                CASH TAG <br></br>
-                {accountInfo.cashTag}
+              <h2 className="pt-6 text-2xl font-bold text-gray-900">
+                {accountInfo.cashTag.toUpperCase()}
               </h2>
-              <p className="pt-2 text-sm text-gray-900">
-                Balance: {accountInfo.balance}E
-              </p>
-              <p className="pt-2 text-sm text-gray-900">
+              <div className="flex justify-center items-center">
+                <p className="text-lg font-semibold">Balance:</p>
+                <p className="text-lg font-semibold">
+                  {accountInfo.balance} ETH
+                </p>
+              </div>
+              <p className="pt-2 text-sm text-gray-900 font-semibold">
                 Wallet Address: {accountInfo.address}
               </p>
             </>
@@ -409,7 +406,7 @@ export default function Home() {
           </div>
           <div className="pt-3 py-auto">
             {!loading ? (
-              <div className="w-[100%] md:max-w-[70%] lg:max-w-[50%] m-auto">
+              <div className="w-[90%] md:max-w-[70%] lg:max-w-[50%] m-auto">
                 <TabButtons buttons={buttons} activeButton={activeButton} />
                 <TabbedActions activeTab={activeTab} tabs={tabs} />
               </div>
