@@ -3,13 +3,19 @@ import { useEffect, useState } from "react";
 import { BigNumber, ethers } from "ethers";
 import abi from "../abi.json";
 import Action from "components/components/action";
-
+import PacmanLoader from "react-spinners/PacmanLoader";
 const Tabs = {
   REGISTER: "register",
   PAY: "pay",
   WITHDRAWL: "withdrawl",
   MESSAGES: "messages",
   ACCOUNT: "account",
+};
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
 };
 
 const TabbedActions = ({ tabs, activeTab }) => {
@@ -139,11 +145,7 @@ export default function Home() {
         setSigner(sign);
 
         // The Contract object
-        const CashAppContract = new ethers.Contract(
-          abi.address,
-          abi.abi,
-          pro
-        );
+        const CashAppContract = new ethers.Contract(abi.address, abi.abi, pro);
         setContract(CashAppContract);
         console.log;
         //Last Message Sent
@@ -260,7 +262,9 @@ export default function Home() {
       name: Tabs.ACCOUNT,
       component: (
         <div className="text-center ">
-          <h1 className="pt-3 text-4xl font-bold text-indigo-600 text-center pb-4">Account</h1>
+          <h1 className="pt-3 text-4xl font-bold text-indigo-600 text-center pb-4">
+            Account
+          </h1>
           {accountInfo && (
             <>
               <h2 className="pt-6 text-3xl text-gray-900">
@@ -282,7 +286,9 @@ export default function Home() {
       name: Tabs.REGISTER,
       component: (
         <>
-          <h1 className="pt-3 text-4xl font-bold text-indigo-600 text-center pb-4">Register</h1>
+          <h1 className="pt-3 text-4xl font-bold text-indigo-600 text-center pb-4">
+            Register
+          </h1>
           <input
             type="text"
             name="register"
@@ -304,7 +310,9 @@ export default function Home() {
       name: Tabs.PAY,
       component: (
         <>
-          <h1 className="pt-3 text-4xl font-bold text-indigo-600 text-center pb-4">Pay</h1>
+          <h1 className="pt-3 text-4xl font-bold text-indigo-600 text-center pb-4">
+            Pay
+          </h1>
           <input
             placeholder="To"
             className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -338,7 +346,9 @@ export default function Home() {
       name: Tabs.WITHDRAWL,
       component: (
         <>
-          <h1 className="pt-3 text-4xl font-bold text-indigo-600 text-center pb-4">Withdrawl</h1>
+          <h1 className="pt-3 text-4xl font-bold text-indigo-600 text-center pb-4">
+            Withdrawl
+          </h1>
 
           <input
             placeholder="Withdrawl From A CashTag You Own"
@@ -358,7 +368,9 @@ export default function Home() {
       name: Tabs.MESSAGES,
       component: (
         <>
-          <h1 className="pt-3 text-4xl font-bold text-indigo-600 text-center pb-4">Messages</h1>
+          <h1 className="pt-3 text-4xl font-bold text-indigo-600 text-center pb-4">
+            Messages
+          </h1>
           <div className="w-full flex flex-wrap">
             {messages?.map((i, index) => (
               <div
@@ -395,18 +407,15 @@ export default function Home() {
               Cash App on Base
             </h1>
           </div>
-          <div className="pt-3">
+          <div className="pt-3 py-auto">
             {!loading ? (
               <div className="w-[100%] md:max-w-[70%] lg:max-w-[50%] m-auto">
-                <TabButtons
-                  buttons={buttons}
-                  activeButton={activeButton}
-                />
+                <TabButtons buttons={buttons} activeButton={activeButton} />
                 <TabbedActions activeTab={activeTab} tabs={tabs} />
               </div>
             ) : (
-              <div className="flex justify-center items-center h-60">
-                <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
+              <div className="flex justify-center itemss-center w-full">
+                <PacmanLoader size={120} color="fuchsia" />
               </div>
             )}
           </div>
@@ -428,4 +437,4 @@ export default function Home() {
       )}
     </div>
   );
-};
+}
