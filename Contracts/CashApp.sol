@@ -80,6 +80,10 @@ contract CashApp {
         balances[_cashtag] = 0;
     }
 
+    function getMessagesCount() public view returns (uint256) {
+        return messages.length;
+    }
+
     // Fallback function to receive Ether
     receive() external payable {}
 }

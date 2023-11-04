@@ -4,6 +4,7 @@ import { BigNumber, ethers } from "ethers";
 import abi from "../abi.json";
 import Action from "components/components/action";
 import PacmanLoader from "react-spinners/PacmanLoader";
+import toast, { Toaster } from "react-hot-toast";
 
 const Tabs = {
   REGISTER: "register",
@@ -70,7 +71,25 @@ export default function Home() {
 
   //   //Track MessageSent Events
   useEffect(() => {
-    const trythis = async () => {
+      const fetchAllMessages = async () => {
+        if (contract) {
+            const totalMessagesCount = await contract.getMessagesCount();
+            const allMessages = [];
+            for (let i = 0; i < totalMessagesCount; i++) {
+                const message = await contract.messages(i);
+                allMessages.push({
+                    content: message.content,
+                    sender: message.sender,
+                    receiver: message.receiver,
+                });
+            }
+            setMessages(allMessages);
+        }
+    };
+
+    fetchAllMessages();
+
+    const onMessageSend = async () => {
       if (contract) {
         contract.on("MessageSent", (content, sender, receiver) => {
           console.log(`${sender} sent ${content} to ${receiver}`);
@@ -81,7 +100,8 @@ export default function Home() {
         });
       }
     };
-    trythis();
+    onMessageSend();
+
     return () => {
       if (contract) {
         contract.removeAllListeners();
@@ -111,7 +131,6 @@ export default function Home() {
   }, []);
 
   const connectWallet = async () => {
-    setLoading(true);
     if (window.ethereum == null) {
       // If MetaMask is not installed, we use the default provider,
       // which is backed by a variety of third-party services (such
@@ -124,44 +143,50 @@ export default function Home() {
       setLoading(false);
     } else {
       try {
-        // A Web3Provider wraps a standard Web3 provider, which is
-        // what MetaMask injects as window.ethereum into each page
-        const pro = new ethers.providers.Web3Provider(window.ethereum);
-        setProvider(pro);
-        const { chainId } = await pro.getNetwork();
-        setNetwork(chainId);
-        // MetaMask requires requesting permission to connect users accounts
-        await pro.send("eth_requestAccounts", []);
+        const connecting = async () => {
+          // A Web3Provider wraps a standard Web3 provider, which is
+          // what MetaMask injects as window.ethereum into each page
+          const pro = new ethers.providers.Web3Provider(window.ethereum);
+          setProvider(pro);
+          const { chainId } = await pro.getNetwork();
+          setNetwork(chainId);
+          // MetaMask requires requesting permission to connect users accounts
+          await pro.send("eth_requestAccounts", []);
 
-        // The MetaMask plugin also allows signing transactions to
-        // send ether and pay to change state within the blockchain.
-        // For this, you need the account signer...
-        const sign = pro.getSigner();
-        setSigner(sign);
+          // The MetaMask plugin also allows signing transactions to
+          // send ether and pay to change state within the blockchain.
+          // For this, you need the account signer...
+          const sign = pro.getSigner();
+          setSigner(sign);
 
-        // The Contract object
-        const CashAppContract = new ethers.Contract(abi.address, abi.abi, pro);
-        setContract(CashAppContract);
-        console.log;
-        //Last Message Sent
-        const messy = await CashAppContract.messages("0");
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { content: messy[0], sender: messy[1], receiver: messy[2] },
-        ]);
+          // The Contract object
+          const CashAppContract = new ethers.Contract(
+            abi.address,
+            abi.abi,
+            pro
+          );
+          setContract(CashAppContract);
 
-        //Signers CashTag and balance
-        const cashTag = await CashAppContract.addressToCashtag(
-          await sign.getAddress()
-        );
-        const balance = await CashAppContract.balances(cashTag);
-        const ether = BigNumber.from(balance);
-        const eth = await ethers.utils.formatUnits(ether.toString(), 18);
-        setAccountInfo({
-          cashTag: cashTag,
-          balance: eth,
-          address: await sign.getAddress(),
+          //Signers CashTag and balance
+          const cashTag = await CashAppContract.addressToCashtag(
+            await sign.getAddress()
+          );
+          console.log(cashTag)
+          const balance = await CashAppContract.balances(cashTag);
+          const ether = BigNumber.from(balance);
+          const eth = await ethers.utils.formatUnits(ether.toString(), 18);
+          setAccountInfo({
+            cashTag: cashTag,
+            balance: eth,
+            address: await sign.getAddress(),
+          });
+        };
+        const wait = await toast.promise(connecting(), {
+          loading: "Connecting to wallet",
+          success: <b>Connection successful!</b>,
+          error: <b>Connection failed.</b>,
         });
+        console.log(wait);
       } catch (error) {
         console.log(error);
         alert(error);
@@ -177,11 +202,17 @@ export default function Home() {
       // that you can pay to send state-changing transactions.
       const CashAppWithSigner = await contract.connect(signer);
 
-      const tx = await CashAppWithSigner.register(register);
-      setLoading(true);
-      const wait = await tx.wait();
+      const tx = await toast.promise(CashAppWithSigner.register(register), {
+        loading: "Confirming Transaction",
+        error: <b>Transaction failed..</b>,
+      });
+
+      const wait = await toast.promise(tx.wait(), {
+        loading: "Transaction Submitted.",
+        success: <b>Transaction successful!</b>,
+        error: <b>Transaction failed.</b>,
+      });
       console.log(wait);
-      setLoading(false);
     }
   };
 
@@ -195,11 +226,20 @@ export default function Home() {
       // Eth has 18 decimal places
       const eth = ethers.utils.parseUnits(amount, 18);
 
-      const tx = await CashAppWithSigner.pay(to, from, message, { value: eth });
-      setLoading(true);
-      const wait = await tx.wait();
+      const tx = await toast.promise(
+        CashAppWithSigner.pay(to, from, message, { value: eth }),
+        {
+          loading: "Confirming Transaction",
+          error: <b>Transaction failed..</b>,
+        }
+      );
+
+      const wait = await toast.promise(tx.wait(), {
+        loading: "Transaction Submitted.",
+        success: <b>Transaction successful!</b>,
+        error: <b>Transaction failed.</b>,
+      });
       console.log(wait);
-      setLoading(false);
     }
   };
 
@@ -407,6 +447,7 @@ export default function Home() {
           <div className="pt-3 py-auto">
             {!loading ? (
               <div className="w-[90%] md:max-w-[70%] lg:max-w-[50%] m-auto">
+                <Toaster position="bottom-right" />
                 <TabButtons buttons={buttons} activeButton={activeButton} />
                 <TabbedActions activeTab={activeTab} tabs={tabs} />
               </div>
@@ -435,3 +476,5 @@ export default function Home() {
     </div>
   );
 }
+
+// Depth-First Search and Breadth-First Search
