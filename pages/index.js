@@ -5,6 +5,13 @@ import abi from "../abi.json";
 import Action from "components/components/action";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import toast, { Toaster } from "react-hot-toast";
+import {
+  FaUser,
+  FaRegistered,
+  FaMoneyBill,
+  FaSignOutAlt,
+  FaEnvelope,
+} from "react-icons/fa";
 
 const Tabs = {
   REGISTER: "register",
@@ -16,11 +23,11 @@ const Tabs = {
 
 const TabbedActions = ({ tabs, activeTab }) => {
   return (
-    <div className="mt-4 md:mt-6">
+    <div className="">
       {tabs.map((tab) => (
         <Action
           key={tab.name}
-          className={`mt-2 bg-white min-h-[80vh] p-6 rounded-lg shadow-lg ${
+          className={` bg-white min-h-[80vh] p-6  ${
             activeTab === tab.name ? "block" : "hidden"
           }`}
         >
@@ -33,18 +40,31 @@ const TabbedActions = ({ tabs, activeTab }) => {
 
 const TabButtons = ({ buttons, activeButton }) => {
   return (
-    <div className="flex flex-wrap justify-center">
+    <div className="flex flex-wrap justify-start">
       {buttons.map((button) => (
         <button
           key={button.label}
-          className={`px-4  m-1 py-2 rounded-lg ${
+          className={`px-4 py-2 flex flex-row ${
             activeButton === button.label
-              ? "bg-indigo-600 text-white"
-              : "bg-gray-200 text-gray-600"
+              ? "bg-white text-indigo-600"
+              : "bg-indigo-600 text-white"
           }`}
           onClick={() => button.onClick()}
         >
-          {button.label}
+          <span className="hidden md:block">
+            {button.label}
+          </span>
+          <span
+            className={`${
+              activeButton === button.label ? "text-indigo-600" : "text-white"
+            } m-0 p-0 md:ml-2 flex pt-1`}
+          >
+            {button.label === Tabs.ACCOUNT && <FaUser />}
+            {button.label === Tabs.REGISTER && <FaRegistered />}
+            {button.label === Tabs.PAY && <FaMoneyBill />}
+            {button.label === Tabs.WITHDRAWL && <FaSignOutAlt />}
+            {button.label === Tabs.MESSAGES && <FaEnvelope />}
+          </span>
         </button>
       ))}
     </div>
@@ -71,20 +91,20 @@ export default function Home() {
 
   //   //Track MessageSent Events
   useEffect(() => {
-      const fetchAllMessages = async () => {
-        if (contract) {
-            const totalMessagesCount = await contract.getMessagesCount();
-            const allMessages = [];
-            for (let i = 0; i < totalMessagesCount; i++) {
-                const message = await contract.messages(i);
-                allMessages.push({
-                    content: message.content,
-                    sender: message.sender,
-                    receiver: message.receiver,
-                });
-            }
-            setMessages(allMessages);
+    const fetchAllMessages = async () => {
+      if (contract) {
+        const totalMessagesCount = await contract.getMessagesCount();
+        const allMessages = [];
+        for (let i = 0; i < totalMessagesCount; i++) {
+          const message = await contract.messages(i);
+          allMessages.push({
+            content: message.content,
+            sender: message.sender,
+            receiver: message.receiver,
+          });
         }
+        setMessages(allMessages);
+      }
     };
 
     fetchAllMessages();
@@ -171,7 +191,7 @@ export default function Home() {
           const cashTag = await CashAppContract.addressToCashtag(
             await sign.getAddress()
           );
-          console.log(cashTag)
+          console.log(cashTag);
           const balance = await CashAppContract.balances(cashTag);
           const ether = BigNumber.from(balance);
           const eth = await ethers.utils.formatUnits(ether.toString(), 18);
@@ -311,7 +331,7 @@ export default function Home() {
                   {accountInfo.balance} ETH
                 </p>
               </div>
-              <p className="pt-2 text-sm text-gray-900 font-semibold">
+              <p className="truncate pt-2 text-sm text-gray-900 font-semibold">
                 Wallet Address: {accountInfo.address}
               </p>
             </>
@@ -439,15 +459,15 @@ export default function Home() {
       </Head>
       {network === liveNetwork ? (
         <div className="mx-auto p-0">
-          <div className="text-center">
-            <h1 className="py-3 text-4xl font-bold bg-indigo-600 text-white">
-              Cash App on Base
+          <div className="">
+            <h1 className="py-3 px-4 text-4xl font-bold bg-indigo-600 text-white">
+              Base Cash
             </h1>
           </div>
           <div className="pt-3 py-auto">
+            <Toaster position="bottom-right" />
             {!loading ? (
-              <div className="w-[90%] md:max-w-[70%] lg:max-w-[50%] m-auto">
-                <Toaster position="bottom-right" />
+              <div className="w-[90%] mt-4  md:max-w-[70%] lg:max-w-[50%] m-auto">
                 <TabButtons buttons={buttons} activeButton={activeButton} />
                 <TabbedActions activeTab={activeTab} tabs={tabs} />
               </div>
