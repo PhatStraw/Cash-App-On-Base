@@ -6,12 +6,12 @@ import Action from "components/components/action";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import toast, { Toaster } from "react-hot-toast";
 import {
-  FaUser,
-  FaRegistered,
-  FaMoneyBill,
-  FaSignOutAlt,
-  FaEnvelope,
-} from "react-icons/fa";
+  BiUser,
+  BiSolidLogIn,
+  BiLogoPaypal,
+  BiMoneyWithdraw,
+  BiMessageSquareDetail,
+} from "react-icons/bi";
 
 const Tabs = {
   REGISTER: "register",
@@ -59,11 +59,11 @@ const TabButtons = ({ buttons, activeButton }) => {
               activeButton === button.label ? "text-indigo-600" : "text-white"
             } m-0 p-0 md:ml-2 flex pt-1`}
           >
-            {button.label === Tabs.ACCOUNT && <FaUser />}
-            {button.label === Tabs.REGISTER && <FaRegistered />}
-            {button.label === Tabs.PAY && <FaMoneyBill />}
-            {button.label === Tabs.WITHDRAWL && <FaSignOutAlt />}
-            {button.label === Tabs.MESSAGES && <FaEnvelope />}
+            {button.label === Tabs.ACCOUNT && <BiUser />}
+            {button.label === Tabs.REGISTER && <BiSolidLogIn />}
+            {button.label === Tabs.PAY && <BiLogoPaypal />}
+            {button.label === Tabs.WITHDRAWL && <BiMoneyWithdraw />}
+            {button.label === Tabs.MESSAGES && <BiMessageSquareDetail />}
           </span>
         </button>
       ))}
