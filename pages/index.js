@@ -467,7 +467,7 @@ export default function Home() {
           <div className="pt-3 py-auto">
             <Toaster position="bottom-right" />
             {!loading ? (
-              <div className="w-[90%] mt-4  md:max-w-[70%] lg:max-w-[50%] m-auto">
+              <div className="w-[90%] mt-4  md:max-w-[73%] lg:max-w-[50%] m-auto">
                 <TabButtons buttons={buttons} activeButton={activeButton} />
                 <TabbedActions activeTab={activeTab} tabs={tabs} />
               </div>
