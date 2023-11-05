@@ -27,7 +27,7 @@ const TabbedActions = ({ tabs, activeTab }) => {
       {tabs.map((tab) => (
         <Action
           key={tab.name}
-          className={` bg-white min-h-[80vh] p-6  ${
+          className={` bg-white h-[80vh] p-6  ${
             activeTab === tab.name ? "block" : "hidden"
           }`}
         >
@@ -350,7 +350,7 @@ export default function Home() {
             type="text"
             name="register"
             id="register"
-            className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="block w-full rounded-md border-gray-300 pl-2 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="Register a CashTag"
             onChange={(e) => setRegister(e.target.value)}
           />
@@ -372,22 +372,22 @@ export default function Home() {
           </h1>
           <input
             placeholder="To"
-            className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="block w-full rounded-md border-gray-300 pl-2 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500"
             onChange={(e) => setTo(e.target.value)}
           />
           <input
             placeholder="From"
-            className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="block w-full rounded-md border-gray-300 pl-2 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500"
             onChange={(e) => setFrom(e.target.value)}
           />
           <input
             placeholder="Message"
-            className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="block w-full rounded-md border-gray-300 pl-2 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500"
             onChange={(e) => setMessage(e.target.value)}
           />
           <input
             placeholder="Amount"
-            className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="block w-full rounded-md border-gray-300 pl-2 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500"
             onChange={(e) => setAmount(e.target.value)}
           />
           <button
@@ -409,7 +409,7 @@ export default function Home() {
 
           <input
             placeholder="Withdrawl From A CashTag You Own"
-            className="block w-full rounded-md border-gray-300 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="block w-full rounded-md border-gray-300 pl-2 shadow-sm mb-4 focus:ring-indigo-500 focus:border-indigo-500"
             onChange={(e) => setWithdrawl(e.target.value)}
           />
           <button
@@ -428,11 +428,11 @@ export default function Home() {
           <h1 className="pt-3 text-4xl font-bold text-indigo-600 text-center pb-4">
             Messages
           </h1>
-          <div className="w-full flex flex-wrap">
+          <div className="w-full flex flex-wrap overflow-y-scroll h-[93%]">
             {messages?.map((i, index) => (
               <div
                 key={index}
-                className="overflow-auto flex w-full border flex-col items-center p-4 mb-4 bg-gray-50 rounded-lg shadow "
+                className="z-0 flex w-full border flex-col items-center p-4 mb-4 bg-gray-50 rounded-lg shadow "
               >
                 <h3 className="border-b border-b-gray-200 w-full pb-2 mb-2 text-center font-semibold">
                   Message #{index + 1}
